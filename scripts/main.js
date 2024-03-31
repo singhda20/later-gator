@@ -19,13 +19,28 @@
 // get refs to the input and output elements in the page
 const input = document.getElementById("target");
 const output = document.querySelector("output");
+const list = document.getElementById("available-targets");
 
 // when the input has focus and enter is pressed, invoke the function named later
 input.addEventListener("keydown", (ev) => {
   console.debug("keydown", ev.key);
   if (ev.key === "Enter") {
     console.log("Enter detected. current value:", input.value);
-    // TODO use the provided later() function here
+    options((keys) => {
+      list.innerHTML = "";
+      for(let i = 0; i < keys.length; i++){
+        const listItem = document.createElement("li");
+        let button = document.createElement("button");
+        button.textContent = keys[i];
+        button.addEventListener("click", () => {
+          later(keys[i], (result) => {
+            setOutput(result.target, result.valediction);
+          });
+        });
+        listItem.appendChild(button);
+        list.appendChild(listItem);
+      }
+    }, input.value.trim());
   }
 });
 
@@ -39,7 +54,7 @@ input.addEventListener("keydown", (ev) => {
 //
 const setOutput = (target, valediction) => {
   console.log("setOutput", target, valediction);
-  // TODO see comments just above 🙄
+  output.textContent = valediction + ", " + target;
 };
 
 // for Part 2
